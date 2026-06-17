@@ -1,5 +1,11 @@
 # SomethingElse
 
+[![CI](https://github.com/uninhibited-scholar/something-else/actions/workflows/ci.yml/badge.svg)](https://github.com/uninhibited-scholar/something-else/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](package.json)
+[![Zero deps](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](package.json)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#contributing)
+
 **Runtime steering for AI agents** — interject a new instruction, pause for
 review, or guard against a destructive command **while the agent is running**,
 without restarting the task.
@@ -94,9 +100,28 @@ Unknown slash words fall through so they reach the agent as a normal prompt.
 
 ```
 npm install
-npm run demo     # fake agent loop: append, pause/resume, block + approve
-npm test         # 21 tests
+npm run demo            # fake agent loop: append, pause/resume, block + approve
+npm run demo:openclaw   # openclaw-replica-style adapter: steer a tool-call loop
+npm test                # 21 tests
 ```
+
+`npm run demo:openclaw` shows a steering instruction reaching the model
+mid-run — the agent finishes the original task *and* the one you added:
+
+```
+  · tool list_files → [list_files] ok (3 matches)
+
+>>> incoming: /steer also list any TODO comments
+  «queued» Queued instruction; will apply at next round boundary.
+  · tool list_files → [list_files] ok (3 matches)
+  «injected» Injecting 1 steering instruction(s) into the plan.
+  · tool list_files → [list_files] ok (3 matches)
+  · model: Done — exports audited AND TODOs listed (per your mid-run note).
+```
+
+See [`src/examples/openclaw-adapter.ts`](src/examples/openclaw-adapter.ts) for
+how the adapter wraps an [openclaw-replica](https://github.com/uninhibited-scholar/openclaw-replica)-style
+streaming tool-call loop.
 
 ## Design
 
@@ -106,6 +131,19 @@ npm test         # 21 tests
 - **Durable history is your concern** — a steering snapshot only captures the
   *control* state (current round + pending queue), not your whole transcript.
 
+## Contributing
+
+Issues and PRs are welcome. To get set up:
+
+```
+npm install
+npm run typecheck && npm test
+```
+
+CI runs typecheck + tests + build on Node 18/20/22 for every push and PR. Please
+keep the zero-runtime-dependency rule and add a test for any behavior change.
+
 ## License
 
 MIT
+
