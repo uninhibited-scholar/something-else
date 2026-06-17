@@ -18,7 +18,7 @@ SomethingElse removes that wait. It's a small, dependency-free TypeScript librar
 that plugs into any round-based agent loop through a tiny adapter.
 
 ```
-npm install something-else   # (once published)
+npm install @uninhibited-scholar/something-else
 ```
 
 ## Why it's safe
@@ -49,8 +49,8 @@ Implement a one-method adapter for your message type and let `runSteerable` own
 the steering boundary:
 
 ```ts
-import { SteeringController, runSteerable } from "something-else";
-import type { SteerableAdapter } from "something-else";
+import { SteeringController, runSteerable } from "@uninhibited-scholar/something-else";
+import type { SteerableAdapter } from "@uninhibited-scholar/something-else";
 
 const controller = new SteeringController({ sessionKey: "chat:42" });
 
@@ -79,7 +79,7 @@ If your front-end is chat-based, `handleSteeringCommand` turns plain messages
 into steering actions so users never leave the chat box:
 
 ```ts
-import { handleSteeringCommand } from "something-else";
+import { handleSteeringCommand } from "@uninhibited-scholar/something-else";
 
 const steer = handleSteeringCommand(sessionKey, incomingText);
 if (steer.handled) { reply(steer.reply); return; }  // don't start a new run

@@ -1,5 +1,5 @@
 {
-  "name": "something-else",
+  "name": "@uninhibited-scholar/something-else",
   "version": "0.1.0",
   "description": "Runtime steering for AI agents — interject, pause, and guard a running agent loop without restarting it. Framework-agnostic.",
   "type": "module",
