@@ -1,0 +1,45 @@
+{
+  "name": "something-else",
+  "version": "0.1.0",
+  "description": "Runtime steering for AI agents — interject, pause, and guard a running agent loop without restarting it. Framework-agnostic.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "ai",
+    "agent",
+    "llm",
+    "steering",
+    "interrupt",
+    "human-in-the-loop",
+    "agent-loop"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "demo": "tsx src/examples/demo.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.21",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.6"
+  }
+}
