@@ -43,6 +43,32 @@ round N+1: [injected instruction] → model ──────┘
 | **Pause / resume** | `controller.pause()` / `resume()` | Loop blocks at the next boundary; a JSON snapshot of round + queue is written to disk. |
 | **Guard** | automatic | Destructive instructions (`rm -rf`, `DROP TABLE`, `curl … \| sh`) are withheld until `approveBlocked(id)`. |
 
+## When to use this (and when not to)
+
+Mid-run steering is increasingly common, so be honest with yourself about which
+bucket you're in:
+
+**Reach for SomethingElse when** you have a **hand-rolled agent loop** or use a
+runtime whose tool loop you don't control the internals of (e.g. the
+[Vercel AI SDK](#vercel-ai-sdk)) and you want append / pause / guard without
+writing the plumbing. It's framework-agnostic, zero-dependency, and small enough
+to read in one sitting.
+
+**You probably don't need it if** you're already on a framework with first-class
+human-in-the-loop support:
+
+| Framework | Built-in mid-run control | Verdict |
+|---|---|---|
+| **LangGraph** | `interrupt()`, checkpoints, state edits | Use its built-ins — don't add this. |
+| **OpenHands** | send messages to a running agent | Built-in; this is redundant. |
+| **OpenAI Agents SDK** | tool-approval / interruptions | Mostly covered. |
+| **Vercel AI SDK** | `prepareStep` hook only, no queue/pause | ✅ Good fit — this fills the gap. |
+| **Hand-rolled loop** | whatever you build | ✅ Its reason to exist. |
+
+The one thing SomethingElse leans on that most built-ins don't advertise:
+instructions are injected **only between tool rounds**, so a running tool is
+never interrupted — a safety property you get for free.
+
 ## Quick start (any agent loop)
 
 Implement a one-method adapter for your message type and let `runSteerable` own
