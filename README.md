@@ -10,6 +10,8 @@
 review, or guard against a destructive command **while the agent is running**,
 without restarting the task.
 
+![demo](assets/demo.svg)
+
 Most agent loops are serial and blocking: once a run starts, you wait for it to
 finish before you can say "oh, also check the logs" or "stop, wrong directory."
 SomethingElse removes that wait. It's a small, dependency-free TypeScript library
