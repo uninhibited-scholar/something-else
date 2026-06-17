@@ -10,6 +10,14 @@
 review, or guard against a destructive command **while the agent is running**,
 without restarting the task.
 
+> 🧩 **Part of the Agent Control Plane** — three small, zero-dependency, framework-agnostic libraries for keeping a human in control across an agent's whole lifecycle. Each works standalone; together they cover **plan → run → intervene**.
+>
+> | Stage | Library | What it does |
+> | --- | --- | --- |
+> | **Before** a step runs | [precheck-guardian](https://github.com/uninhibited-scholar/precheck-guardian) | Preview the plan, see per-step risk, approve / reject / edit |
+> | **During** the run ← *you are here* | **something-else** | Interject, pause, or guard a live loop without restarting |
+> | **The loop engine** | [loop-runtime](https://github.com/uninhibited-scholar/loop-runtime) | Budget circuit-breakers, maker/checker, worktree isolation, human gates |
+
 ![demo](assets/demo.svg)
 
 Most agent loops are serial and blocking: once a run starts, you wait for it to
