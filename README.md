@@ -73,6 +73,35 @@ No adapter and just want the engine? Use the controller directly and call
 `await controller.beforeRound(round)` yourself at the top of your loop — it
 returns `{ injectedMessage }` to append.
 
+### Vercel AI SDK
+
+The AI SDK runs the tool loop for you, but its `prepareStep` callback fires
+right before each step — the exact steering boundary. Three lines:
+
+```ts
+import { streamText, stepCountIs } from "ai";
+import { SteeringController } from "@uninhibited-scholar/something-else";
+
+const controller = new SteeringController({ sessionKey: "chat:42" });
+
+streamText({
+  model, messages, tools,
+  stopWhen: stepCountIs(10),
+  prepareStep: async ({ stepNumber, messages }) => {
+    const steer = await controller.beforeRound(stepNumber);
+    return steer.injectedMessage
+      ? { messages: [...messages, { role: "user", content: steer.injectedMessage }] }
+      : {};
+  },
+});
+
+// elsewhere, on the same sessionKey:
+controller.enqueue("also grep for TODOs");
+```
+
+Runnable, no API key: `npm run demo:vercel`
+([source](src/examples/vercel-ai-sdk.ts)).
+
 ## Slash-command trigger (optional)
 
 If your front-end is chat-based, `handleSteeringCommand` turns plain messages
@@ -104,6 +133,7 @@ Unknown slash words fall through so they reach the agent as a normal prompt.
 npm install
 npm run demo            # fake agent loop: append, pause/resume, block + approve
 npm run demo:openclaw   # openclaw-replica-style adapter: steer a tool-call loop
+npm run demo:vercel     # Vercel AI SDK: steer via the prepareStep callback
 npm test                # 21 tests
 ```
 

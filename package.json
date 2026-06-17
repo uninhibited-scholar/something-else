@@ -45,6 +45,7 @@
     "typecheck": "tsc --noEmit",
     "demo": "tsx src/examples/demo.ts",
     "demo:openclaw": "tsx src/examples/openclaw-adapter.ts",
+    "demo:vercel": "tsx src/examples/vercel-ai-sdk.ts",
     "prepublishOnly": "npm run typecheck && npm run test && npm run build"
   },
   "devDependencies": {
