@@ -123,6 +123,10 @@ See [`src/examples/openclaw-adapter.ts`](src/examples/openclaw-adapter.ts) for
 how the adapter wraps an [openclaw-replica](https://github.com/uninhibited-scholar/openclaw-replica)-style
 streaming tool-call loop.
 
+> Want an animated SVG of this for the README? Run
+> [`./scripts/record-demo.sh`](scripts/record-demo.sh) (needs `asciinema` +
+> `svg-term-cli`) to produce `assets/demo.svg`.
+
 ## Design
 
 - **Zero runtime dependencies** — Node builtins only.
