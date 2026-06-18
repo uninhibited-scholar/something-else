@@ -7,11 +7,18 @@
   "keywords": [
     "ai",
     "agent",
+    "ai-agents",
     "llm",
+    "runtime-steering",
+    "agent-steering",
     "steering",
     "interrupt",
+    "interrupt-agent",
+    "pause",
     "human-in-the-loop",
-    "agent-loop"
+    "agent-loop",
+    "agent-control",
+    "guardrails"
   ],
   "engines": {
     "node": ">=18"

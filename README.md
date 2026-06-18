@@ -1,4 +1,6 @@
-# SomethingElse
+# SomethingElse — Runtime Steering for AI Agents
+
+> *Interrupt, pause & guard a running agent loop — without restarting the task.*
 
 [![CI](https://github.com/uninhibited-scholar/something-else/actions/workflows/ci.yml/badge.svg)](https://github.com/uninhibited-scholar/something-else/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -10,13 +12,13 @@
 review, or guard against a destructive command **while the agent is running**,
 without restarting the task.
 
-> 🧩 **Part of the Agent Control Plane** — three small, zero-dependency, framework-agnostic libraries for keeping a human in control across an agent's whole lifecycle. Each works standalone; together they cover **plan → run → intervene**.
+> 🧩 **Part of the Agent Loop Toolkit** — three small, zero-dependency, framework-agnostic libraries you bolt onto any agent loop. Each works standalone; together they cover **context → gate → steer**.
 >
-> | Stage | Library | What it does |
+> | Where it plugs in | Library | What it does |
 > | --- | --- | --- |
-> | **Before** a step runs | [precheck-guardian](https://github.com/uninhibited-scholar/precheck-guardian) | Preview the plan, see per-step risk, approve / reject / edit |
-> | **During** the run ← *you are here* | **something-else** | Interject, pause, or guard a live loop without restarting |
-> | **The loop engine** | [loop-runtime](https://github.com/uninhibited-scholar/loop-runtime) | Budget circuit-breakers, maker/checker, worktree isolation, human gates |
+> | **The context** going in | [context-compressor](https://github.com/uninhibited-scholar/context-compressor) | Shrink the LLM context window 40–80% — drop noise, redundancy, long-tail detail |
+> | **The plan**, before a step runs | [precheck-guardian](https://github.com/uninhibited-scholar/precheck-guardian) | Preview the plan, see per-step risk, approve / reject / edit |
+> | **The run**, while it's live ← *you are here* | **something-else** | Interject, pause, or guard a live loop without restarting |
 
 ![demo](assets/demo.svg)
 
@@ -24,6 +26,17 @@ Most agent loops are serial and blocking: once a run starts, you wait for it to
 finish before you can say "oh, also check the logs" or "stop, wrong directory."
 SomethingElse removes that wait. It's a small, dependency-free TypeScript library
 that plugs into any round-based agent loop through a tiny adapter.
+
+### Why not just restart it?
+
+Because restarting throws away everything the run has already earned, and can't undo what it already did:
+
+- **Lost progress is expensive.** A run that's spent 20 minutes and thousands of tokens building up context — crawled pages, intermediate results, tool state — loses all of it on restart, then has to repay that time and cost from zero.
+- **Side effects are already real.** By the time you notice it's off track, the agent may have written files, hit APIs, or created records. You can't "restart" actions that already happened — you can only correct course *in place*, mid-loop.
+- **Long tasks drift mid-run.** Deep research and multi-step coding take tens of minutes. Spotting a wrong turn at minute 5 and waiting for the whole run to finish before redoing it is the worst case — a single interjection saves the entire re-run.
+- **Restarting wipes your feedback.** Corrections you already gave in earlier rounds vanish too; you end up re-teaching the same lesson.
+
+`Ctrl+C` and re-prompt is fine for a 10-second run. SomethingElse exists for the runs where starting over is the costly option.
 
 ```
 npm install @uninhibited-scholar/something-else
